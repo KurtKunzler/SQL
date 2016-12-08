@@ -1,0 +1,52 @@
+SELECT
+   INV.Account_Name 'Account Name',
+   FIM.InternalID1 'Account Number',
+   INV.TaxID,
+   INV_ENT.EntityName,
+   FF.FamilyName 'Family Name',
+   F.Abbreviation 'Abbr',
+   F.*******_Name '******* Name',
+   C.Name 'Primary Address Country',
+   FSC.*******,
+   A.State AS 'State'
+
+FROM
+   *******s INV
+   JOIN *******Entity INV_ENT
+       ON INV.Entity_ID = INV_ENT.ID
+   JOIN **************Matrix FIM
+       ON FIM.*********ID=INV.*********ID
+   JOIN *******s F
+       ON FIM.*********ID=F.*********ID
+   JOIN *******Family FF
+       ON F.*******Family**ID=FF.*******Family**ID
+       AND
+       FF.FamilyName = '*******'
+  JOIN Address A
+       ON INV.PrimaryAddress**ID = A.Address**ID
+  JOIN Country C
+      ON A.Country**ID = C.Country**ID
+  JOIN *******ShareClass ISC
+      ON ISC.**************Matrix**ID=FIM.**************Matrix**ID
+  JOIN *******ShareClassHistory ISCH
+      ON ISCH.*******ShareClass**ID=ISC.*******ShareClass**ID
+      AND ISCH.StartDate >= '01/01/2016'
+      AND ISCH.StartDate < '01/01/2017'
+  JOIN *******ShareClass FSC
+      ON FSC.*******ShareClass**ID=ISC.*******ShareClass**ID
+
+GROUP BY
+    INV.Account_Name,
+   FIM.InternalID1,
+   INV.TaxID,
+   INV_ENT.EntityName,
+   FF.FamilyName,
+   F.Abbreviation,
+   F.*******_Name,
+   C.Name,
+   FSC.*******,
+   A.State
+
+ORDER BY 
+   F.*******_Name,
+   INV.Account_Name
